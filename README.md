@@ -1,6 +1,6 @@
-# 🌍 Real-Time Translation API
+# 🌍 Real-Time English ➜ French Translation API with Streamlit Frontend
 
-A FastAPI-powered real-time translation API that converts **English** text to **French** using Google Translate and evaluates the quality of translation using **BLEU Score** and **Perplexity**. It also tracks memory usage and response time for every request.
+A full-stack **real-time translation application** that uses a **FastAPI backend** and an **interactive Streamlit frontend** to translate English text to French. The app integrates **Google Translate**, evaluates output using **BLEU Score** and **Perplexity**, and visualizes insights with **SHAP Beeswarm plots**. It also tracks performance metrics like response time and memory usage.
 
 ---
 
@@ -8,49 +8,69 @@ A FastAPI-powered real-time translation API that converts **English** text to **
 
 This project is perfect for:
 
-- 🧑‍🎓 **Students & Researchers** working on NLP, machine translation, or language modeling
-- 👨‍💻 **Developers** building translation features into applications
-- 📚 **Educators** teaching about BLEU scores, perplexity, and API architecture
-- ⚙️ **Engineers** interested in real-time performance monitoring and FastAPI
+- 🧑‍🎓 **Students & Researchers** working on NLP, machine translation, or model explainability  
+- 👨‍💻 **Developers** integrating real-time translation into web apps  
+- 📚 **Educators** teaching model evaluation, APIs, or SHAP  
+- 🛠️ **Engineers** interested in containerization and GCP deployment  
 
 ---
 
-## 📦 Features
+## ⚙️ Features
 
-- ✅ Translates English text into French using **Google Translate**
-- 📊 Computes **BLEU Score** to evaluate translation accuracy
-- 📉 Calculates **Perplexity** using Hugging Face’s `facebook/m2m100_418M` model
-- 📈 Tracks total requests, response time, and memory usage
-- 🔎 Swagger UI & ReDoc API documentation
-- 🌐 Automatically opens documentation on server start
+✅ Translate English text to **French**  
+📊 Compute **BLEU Score** to evaluate translation accuracy  
+📉 Calculate **Perplexity** using Hugging Face's `facebook/m2m100_418M`  
+🔒 **Input Validation** using Pydantic  
+✅ **SHAP Beeswarm** plots for translation explainability  
+🛡️ **Great Expectations** for optional data contract enforcement  
+📟 Monitor **response time**, **memory usage**, and **total requests**  
+🧪 View and test all endpoints using **Swagger UI** and **ReDoc**  
+🖥️ Beautiful **Streamlit frontend** with voice support and TTS  
 
 ---
 
-## 🗃️ Project Structure
+## 🧱 Architecture Overview
 
-            +-------------------------+
-            |   End User (Client)     |
-            |  (e.g. Postman, Browser)|
-            +-----------+-------------+
-                        |
-                        | 1. Send POST request with text
-                        v
-            +-----------+-------------+
-            |       FastAPI Server    |
-            |       (main.py)         |
-            +-----------+-------------+
-                        |
-                        | 2. Calls TranslationModel
-                        v
-            +-----------+-------------+
-            | model.py:               |
-            | - Google Translate API  |
-            | - BLEU Score via NLTK   |
-            | - Perplexity via HF     |
-            +-----------+-------------+
-                        |
-                        | 3. Return translated text and metrics
-                        v
-            +-------------------------+
-            |     JSON Response       |
-            +-------------------------+
+```txt
++--------------------------+
+|      End User           |
+|  (Browser / Streamlit)  |
++-----------+--------------+
+            |
+            | 1. Send input text
+            v
++-----------+--------------+
+|  Streamlit Frontend      |
+|  - Collects input        |
+|  - Shows translation     |
+|  - Sends POST to FastAPI |
++-----------+--------------+
+            |
+            | 2. API Request
+            v
++-----------+--------------+
+|  FastAPI Backend          |
+|  - Validation (/validate)|
+|  - Translation (/translate)
+|  - Returns scores & metrics
++-----------+--------------+
+            |
+            | 3. Translation + SHAP
+            v
++-----------+--------------+
+|  model.py                |
+|  - Google Translate      |
+|  - BLEU (NLTK)           |
+|  - Perplexity (HF)       |
+|  - SHAP beeswarm         |
++-----------+--------------+
+            |
+            | 4. JSON Response
+            v
++--------------------------+
+|  Streamlit Displays      |
+|  - Translated text       |
+|  - BLEU & Perplexity     |
+|  - Beeswarm plot         |
+|  - Metrics & Voice       |
++--------------------------+
